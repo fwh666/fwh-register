@@ -9,7 +9,8 @@ package club.fuwenhao.enums;
  * @date: 2023-04-16 4:00 PM
  */
 public enum ResponseCodeEnum {
-    SUCCESS("0000", "成功");
+    SUCCESS("0000", "成功"),
+    INVALID_TOKEN("1001", "无效token");
 
     private String code;
     private String message;

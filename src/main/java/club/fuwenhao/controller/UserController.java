@@ -1,6 +1,7 @@
 package club.fuwenhao.controller;
 
 import club.fuwenhao.bean.User;
+import club.fuwenhao.enums.ResponseCodeEnum;
 import club.fuwenhao.result.RespEntity;
 import club.fuwenhao.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,14 @@ public class UserController {
 
     @GetMapping("/me")
     public RespEntity<User> me(@RequestHeader("Authorization") String token) {
-        if (token.contains("Bearer")) {
-            return RespEntity.success(userService.getUserByToken(token.substring(7)));
-        } else {
-            return RespEntity.success(userService.getUserByToken(token));
+        try {
+            if (token.contains("Bearer")) {
+                return RespEntity.success(userService.getUserByToken(token.substring(7)));
+            } else {
+                return RespEntity.success(userService.getUserByToken(token));
+            }
+        } catch (Exception e) {
+            return RespEntity.failure(ResponseCodeEnum.INVALID_TOKEN.getCode(), ResponseCodeEnum.INVALID_TOKEN.getMessage(), "");
         }
     }
 }

@@ -84,12 +84,13 @@ public class RespEntity<T> implements Serializable {
 //        return failure(code, msg, (Object) null);
 //    }
 //
-//    public static <T> RespEntity failure(String code, String msg, T data) {
-//        RespEntity<T> result = new RespEntity(code, msg);
-//        result.setData(data);
-//        return result;
-//    }
-//
+    public static <T> RespEntity failure(String code, String msg, T data) {
+        RespEntity<T> result = new RespEntity(code, msg);
+        result.setData(data);
+        return result;
+    }
+
+    //
     public String getCode() {
         return this.code;
     }
