@@ -10,7 +10,8 @@ package club.fuwenhao.enums;
  */
 public enum ResponseCodeEnum {
     SUCCESS("0000", "成功"),
-    INVALID_TOKEN("1001", "无效token");
+    LOGIN_FAIL("10001", "登录失败"),
+    INVALID_TOKEN("1002", "无效token");
 
     private String code;
     private String message;

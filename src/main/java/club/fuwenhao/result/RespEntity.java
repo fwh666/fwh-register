@@ -90,6 +90,12 @@ public class RespEntity<T> implements Serializable {
         return result;
     }
 
+    public static <T> RespEntity failure(ResponseCodeEnum responseCodeEnum, T data) {
+        RespEntity<T> result = new RespEntity(responseCodeEnum.getCode(), responseCodeEnum.getMessage());
+        result.setData(data);
+        return result;
+    }
+
     //
     public String getCode() {
         return this.code;
