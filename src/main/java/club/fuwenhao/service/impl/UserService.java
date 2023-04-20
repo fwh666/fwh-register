@@ -42,7 +42,8 @@ public class UserService {
             throw new RuntimeException("Invalid username or password");
         }
         String token = JwtUtil.generateToken(user);
-        redisTemplate.opsForValue().set(token, user.getId(), JwtUtil.parseDateLong(token) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+//        redisTemplate.opsForValue().set(token, user.getId(), JwtUtil.parseDateLong(token) - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(token, user.getId(), 3, TimeUnit.HOURS);
         return token;
     }
 

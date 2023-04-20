@@ -11,9 +11,7 @@ package club.fuwenhao.filter;
 import club.fuwenhao.intercept.AuthorizationInterceptor;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.Ordered;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -32,8 +30,18 @@ public class JztMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(authorizationInterceptor);
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+//        WebMvcConfigurer.super.addCorsMappings(registry);
+//        registry.addMapping("/**")
+        registry.addMapping("/")
+                .allowedOrigins("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .maxAge(3600);
+    }
 
-//    @Bean
+    //    @Bean
 //    public FilterRegistrationBean servletRegistrationBean() {
 //        BaseFilter userInfoFilter = new BaseFilter();
 //        FilterRegistrationBean<BaseFilter> bean = new FilterRegistrationBean<>();

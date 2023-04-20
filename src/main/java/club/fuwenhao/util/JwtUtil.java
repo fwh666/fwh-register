@@ -1,5 +1,6 @@
 package club.fuwenhao.util;
 
+import club.fuwenhao.bean.User;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
@@ -81,7 +82,11 @@ public class JwtUtil {
 
 
     public static void main(String[] args) {
-        String zhang = generateToken("zhang");
+//        String token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2ODE5OTk3MDQsImRhdGEiOiJ7XCJjcmVhdGVkVGltZVwiOjE2ODE5OTk2OTIwMDAsXCJpZFwiOjgsXCJwYXNzd29yZFwiOlwiJDJhJDEwJHBQNEVPMjhDazh3NjFHSTZkLkU1TXVmOUVVWVkuanB1OE1XV0R0bEpxMVQ3cGxKYnVidGk2XCIsXCJ1c2VybmFtZVwiOlwiZndoMDFAamQuY29tXCJ9IiwiZXhwIjoxNjgxOTkwNzI1LCJpYXQiOjE2ODE5OTk3MDR9.BTzAteEA-nzTqZwzf0WeKWEW3dFKNtqdj_1P2sTp7dA";
+//        long l1 = parseDateLong(token);
+//        System.out.println(l1);
+
+        String zhang = generateToken(new User().setPassword("werwe"));
         System.out.println(zhang);
         long l = parseDateLong(zhang);
         System.out.println(l);
