@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Table(name = "user")
@@ -18,4 +19,10 @@ public class User implements Serializable {
     private String username;
 
     private String password;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "created_time", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Date createdTime;
+
+    private Date modifiedTime;
 }

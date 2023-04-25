@@ -10,8 +10,11 @@ import lombok.Getter;
 * @Version 4.3
 **/
 public enum AppBusinessCode {
-    LOGIN_FAIL("10001", "登录失败"),
+    LOGIN_FAIL("1001", "登录失败"),
     INVALID_TOKEN("1002", "无效token"),
+
+    USER_EXIST("1003", "用户已存在"),
+    GUEST_COUNT_LIMIT("1004", "访客访问次数超限"),
     /**
      * 81001 - 请勿重复操作
      */

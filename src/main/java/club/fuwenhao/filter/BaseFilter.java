@@ -23,7 +23,7 @@ public class BaseFilter implements Filter {
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setHeader("Access-Control-Allow-Origin", "*"); // 允许http://localhost:3000跨域请求数据
             response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE"); // 允许的请求方法
-            response.setHeader("Access-Control-Allow-Headers", "Content-Type"); // 允许的请求头
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization"); // 允许的请求头 -todo-fwh-Authorization
 
         } catch (Exception e) {
             log.warn("parameterRequestWrapper Error:", e);

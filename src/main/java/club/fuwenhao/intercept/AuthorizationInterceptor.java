@@ -2,6 +2,7 @@ package club.fuwenhao.intercept;
 
 import club.fuwenhao.exception.AppBusinessCode;
 import club.fuwenhao.exception.AppBusinessException;
+import club.fuwenhao.util.RequestUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 //import com.jdcity.joycity.annotation.NoNeedLogin;
@@ -15,13 +16,13 @@ import com.alibaba.fastjson.JSONObject;
 //import com.jdcity.jzt.common.exception.BusinessException;
 //import com.jdcity.jzt.common.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -62,16 +63,25 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         //验证通行
-//        if (requestURI.startsWith("/users/auth")) {
+//        if (requestURI.startsWith("/users/checkCurrentAuth")) {
 //            return true;
 //        }
         //校验token
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.isEmpty(token)) {
-            log.error("用户未登陆");
-            throw new AppBusinessException(AppBusinessCode.INVALID_TOKEN);
+        if (StringUtils.isBlank(token)||"null".equals(token)) {
+            //访客用户，校验五次访问api接口
+            String guestIp = RequestUtil.getRealIp(request);
+            Long count = redisTemplate.opsForValue().increment(guestIp, 1);
+            if (count>5){
+                log.info("访客IP:{},超过五次,请登录使用",guestIp);
+                throw new AppBusinessException(AppBusinessCode.GUEST_COUNT_LIMIT);
+            }else {
+                return true;
+            }
+//            throw new AppBusinessException(AppBusinessCode.INVALID_TOKEN);
         }
         if (!redisTemplate.hasKey(token)) {
+            log.error("登录已失效");
             throw new AppBusinessException(AppBusinessCode.INVALID_TOKEN);
         }
         return true;

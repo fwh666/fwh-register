@@ -1,20 +1,18 @@
 package club.fuwenhao.service.impl;
 
 import club.fuwenhao.bean.User;
+import club.fuwenhao.exception.AppBusinessCode;
+import club.fuwenhao.exception.AppBusinessException;
 import club.fuwenhao.service.UserRepository;
 import club.fuwenhao.util.JwtUtil;
-import io.jsonwebtoken.JwtBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import reactor.util.annotation.Nullable;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -32,8 +30,14 @@ public class UserService {
     private RedisTemplate<String, Object> redisTemplate;
 
     public User register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        User byUsername = userRepository.findByUsername(user.getUsername());
+        if (ObjectUtils.isEmpty(byUsername)) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setCreatedTime(new Date());
+            return userRepository.save(user);
+        } else {
+            throw new AppBusinessException(AppBusinessCode.USER_EXIST);
+        }
     }
 
     public String login(String username, String password) {
@@ -55,11 +59,10 @@ public class UserService {
         return userRepository.findById(Long.valueOf(userId)).orElse(null);
     }
 
-    public String auth(String token, HttpServletResponse response) throws IOException {
+    public String auth(String token) {
         Object o = redisTemplate.opsForValue().get(token);
         if (ObjectUtils.isEmpty(o)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.sendRedirect("/login");
+            throw new AppBusinessException(AppBusinessCode.INVALID_TOKEN);
         }
         return o.toString();
     }
